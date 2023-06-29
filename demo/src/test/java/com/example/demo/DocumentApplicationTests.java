@@ -36,9 +36,9 @@ class DocumentApplicationTests {
 
 		list.add(document1);
 		when(dao.findAll()).thenReturn(list);
-//		mockMvc.perform(MockMvcRequestBuilders.get("/documents)"))
-//				.andExpect(MockMvcResultMatchers.status().isOk())
-//				.andExpect(MockMvcResultMatchers.content().json("[{}]"));
+		mockMvc.perform(MockMvcRequestBuilders.get("/documents)"))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.content().json("[{}]"));
 	}
 
 }
