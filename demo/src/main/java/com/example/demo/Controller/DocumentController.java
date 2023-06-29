@@ -37,7 +37,7 @@ public class DocumentController {
         return documentService.listDocuments();
     }
 
-    @PostMapping
+    @PostMapping("/{id}")
     public ResponseEntity<?> create(@RequestBody Document doc) {
         try {
             documentService.create(doc);
@@ -59,7 +59,7 @@ public class DocumentController {
         }
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<?> update(@RequestBody Document doc) {
         try{
             Document dc = documentService.update(doc);

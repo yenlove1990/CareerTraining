@@ -27,12 +27,10 @@ public class DocumentService {
 
     }
     public void create(Document doc) throws AlreadyExistingException {
-        try{
-            documentDao.save(doc);
-        }
-        catch (Exception e){
+        if (documentDao.findById(doc.getId()).isPresent()) {
             throw new AlreadyExistingException("A document with id " + doc.getId() + " already exists.");
         }
+        documentDao.save(doc);
 
     }
     public void delete(int id) throws NotExistException{
