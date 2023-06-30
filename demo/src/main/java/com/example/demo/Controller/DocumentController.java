@@ -11,8 +11,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
-@RequestMapping(value = "/documents",consumes = "application/json")
+@RequestMapping(value = "/documents", consumes = "application/json")
 public class DocumentController {
     private final DocumentService documentService;
 
@@ -20,56 +21,51 @@ public class DocumentController {
     public DocumentController(DocumentService documentService) {
         this.documentService = documentService;
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getDocument(@PathVariable int id) {
-        try{
+        try {
             Document doc = documentService.getDocument(id);
             return new ResponseEntity<>(doc, HttpStatus.OK);
-        }
-        catch (NotExistException ne){
+        } catch (NotExistException ne) {
             return new ResponseEntity<>(ne.getMessage(), HttpStatus.CONFLICT);
         }
-
     }
 
     @GetMapping
-    public List<Document> listDocuments() {
-        return documentService.listDocuments();
+    public ResponseEntity<List<Document>> listDocuments() {
+        List<Document> documents = documentService.listDocuments();
+        return new ResponseEntity<>(documents, HttpStatus.OK);
     }
 
-    @PostMapping("/{id}")
+    @PostMapping
     public ResponseEntity<?> create(@RequestBody Document doc) {
         try {
             documentService.create(doc);
-            return  new ResponseEntity<>("Document created!", HttpStatus.OK);
-        } catch (AlreadyExistingException ae){
+            return new ResponseEntity<>("Document created!", HttpStatus.OK);
+        } catch (AlreadyExistingException ae) {
             return new ResponseEntity<>(ae.getMessage(), HttpStatus.CONFLICT);
         }
-
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable int id) {
-        try{
+        try {
             documentService.delete(id);
-            return  new ResponseEntity<>("Document deleted id :" + id, HttpStatus.OK);
-        }
-        catch(NotExistException ne){
+            return new ResponseEntity<>("Document deleted id :" + id, HttpStatus.OK);
+        } catch (NotExistException ne) {
             return new ResponseEntity<>(ne.getMessage(), HttpStatus.CONFLICT);
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@RequestBody Document doc) {
-        try{
-            Document dc = documentService.update(doc);
-            return new ResponseEntity<>(dc, HttpStatus.OK);
+    public ResponseEntity<?> update(@PathVariable int id, @RequestBody Document doc) {
+        try {
+            doc.setId(id);
+            Document updatedDoc = documentService.update(doc);
+            return new ResponseEntity<>(updatedDoc, HttpStatus.OK);
+        } catch (NotExistException ne) {
+            return new ResponseEntity<>(ne.getMessage(), HttpStatus.NOT_FOUND);
         }
-        catch (NotExistException ne){
-            return new ResponseEntity<>(ne.getMessage(), HttpStatus.CONFLICT);
-        }
-
     }
-
-
 }

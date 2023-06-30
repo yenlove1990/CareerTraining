@@ -12,5 +12,4 @@ public class Document {
     @Id
     private int id;
     private String content;
-
 }
